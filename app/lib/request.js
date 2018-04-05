@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_HOST = "https://carlos-rails-api.herokuapp.com";
+const API_HOST = "https://localhost:3000";
 
 const getUrl = endpoint => API_HOST + endpoint;
 
