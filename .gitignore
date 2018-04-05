@@ -1,0 +1,5 @@
+# compiled output
+/.next
+
+# dependencies
+/node_modules
