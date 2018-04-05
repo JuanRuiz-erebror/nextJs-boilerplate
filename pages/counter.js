@@ -11,20 +11,6 @@ import { makeSelectCounter } from '../app/selectors/counter'
 
 class CounterPage extends React.Component {
 
-	static async getInitialProps ({ req }) {
-		/*console.log('store',store.dispatch(incrementCount()))
-	    store.dispatch(countIncrease())
-	    if (!store.getState().placeholder.data) {
-	      store.dispatch(loadData())
-	    }*/
-	    
-
-	    return {}
-
-	}
-
-
-
 
 	render() {
 		console.log('props',this.props)
@@ -44,4 +30,3 @@ class CounterPage extends React.Component {
 
 
 export default withReduxSaga(CounterPage)
-// export default CounterPage;

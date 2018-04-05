@@ -80,7 +80,7 @@ class NavbarComponent extends React.Component { // eslint-disable-line react/pre
 	      <div>
 	        <Navbar light expand="md" fixed="top">
 	          	<NavbarBrand href="#">
-	          		Cubiculum.io
+	          		erebror
 	          	</NavbarBrand>
 	          	<NavbarToggler onClick={this.toggle} />
 	          	<Collapse isOpen={this.state.isOpen} navbar>
