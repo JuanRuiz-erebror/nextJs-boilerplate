@@ -8,7 +8,6 @@ export default WrappedComponent => {
 	    }
 
 	    getChildContext() {
-	    	console.log('UUUUUUU',this.props)
 	      	return { pathname: this.props.pathname }
 	    }
 	    

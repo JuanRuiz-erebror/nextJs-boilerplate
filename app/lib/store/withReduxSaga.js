@@ -20,7 +20,10 @@ export function configureStore(initialState = {}) {
     fromJS(initialState),
     composeWithDevTools(applyMiddleware(sagaMiddleware))
   )
-  store.sagaTask = sagaMiddleware.run(rootSaga)
+
+  store.runSagaTask = () => store.sagaTask = sagaMiddleware.run(rootSaga)
+  store.runSagaTask()
+
   return store
 }
 

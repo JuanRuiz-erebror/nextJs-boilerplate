@@ -13,9 +13,11 @@ const i18next = () => new Promise((resolve, reject) => {
         .use(Backend)
         .use(i18nextMiddleware.LanguageDetector)
         .init({
-        fallbackLng: lng,
+        fallbackLng: 'es',
+        debug:false,
+        load: 'languageOnly',
         // detection: optionsLang,
-        preload: lng, // preload all langages
+        preload:lng, // preload all langages
         ns:ns, // need to preload all the namespaces
         defaultNS:'common',
         backend: {

@@ -9,6 +9,10 @@ const selectCounterDomain = (state) => state.get('counter')
 /**
  * Other specific selectors
  */
+ const makeSelectUri = () => createSelector(
+  selectCounterDomain,
+  (substate) => substate.get('uri')
+);
 
 
 /**
@@ -24,5 +28,6 @@ export default makeSelectCounter;
 
 export {
 	makeSelectCounter,
+	makeSelectUri,
   	selectCounterDomain
 };

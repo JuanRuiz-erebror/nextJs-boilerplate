@@ -4,12 +4,15 @@ const i18next = require('i18next');
 const XHR = require('i18next-xhr-backend');
 const LanguageDetector = require('i18next-browser-languagedetector');
 const { reactI18nextModule } = require('react-i18next');
-
+const Cache = require('i18next-localstorage-cache');
+const { getCookieFromBrowser } = require('./cookie-handler')
 const lng = ['es','en'];
 const ns = ['common','home','hello','lang'];
 
+
+
 const options = {
-  fallbackLng: lng,
+ 
   // lng: 'es',
   load: 'languageOnly', // we only provide en, de -> no region specific locals like en-US, de-DE
 
@@ -17,7 +20,8 @@ const options = {
   ns: ns,
   defaultNS: 'common',
 
-  debug: process.env.NODE_ENV !== 'production',
+  // debug: process.env.NODE_ENV !== 'production',
+  debug: false,
   saveMissing: true,
 
   interpolation: {
@@ -27,7 +31,11 @@ const options = {
       if (format === 'uppercase') return value.toUpperCase()
       return value
     }
-  }  
+  },
+  cache: {
+      enabled: true,
+      expirationTime: 24 * 60 * 60 * 1000
+    }
 }
 
 const reactOpt = {
@@ -42,15 +50,35 @@ const reactOpt = {
 
 const i18nInstance = i18next
 
+
+
 // for browser use xhr backend to load translations and browser lng detector
 if (process.browser) {
-  Object.assign(options,reactOpt)
-  i18nInstance
-    .use(XHR)
-    // .use(Cache)
-    .use(LanguageDetector)
-    .use(reactI18nextModule) 
+
+    let lang = 'es'
+
+    if (localStorage.getItem('i18nextLng')) {
+        lang = localStorage.getItem('i18nextLng').substring(0,2)
+    }
+    
+
+    if (!localStorage.getItem(`i18next_res_${lang}`)) {        
+        Object.assign(options,reactOpt)
+    }
+
+    Object.assign(options,{ fallbackLng: lang})
+
+    i18nInstance
+        .use(XHR) 
+        .use(Cache)
+        .use(LanguageDetector)
+        .use(reactI18nextModule) 
+    
+
+  console.log('OPTRA',options)
+  
 }
+
 
 
 // initialize if not already initialized
@@ -72,9 +100,6 @@ const getInitialProps = (req, namespaces) => {
       initialI18nStore[l][ns] = (req.i18n.services.resourceStore.data[l] || {})[ns] || {}
     })
   })
-
-  console.log('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO',initialI18nStore)
-
 
 
   return {

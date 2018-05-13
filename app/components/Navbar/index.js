@@ -1,45 +1,51 @@
-/**
-*
-* Navbar
-*
-*/
 
 import React from 'react';
 // import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import {
-  Collapse,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu } from 'reactstrap';
-
+	Button,
+  	Collapse,
+  	NavbarToggler,
+  	NavbarBrand,
+  	Nav,
+  	NavLink,
+  	Dropdown,
+  	DropdownToggle,
+  	DropdownItem,
+  	DropdownMenu } from 'reactstrap';
 import Navbar from './Navbar'
-import DropdownItem from './DropdownItem'
+import NavItem from './NavItem'
+import DropdownItemMod from './DropdownItem'
+import DropdownMenuMod from './DropdownMenu'
 import ActiveLink from '../ActiveLink'
-
 import { translate } from 'react-i18next'
 import { i18nInstance } from '../../../app/lib/i18n'
 import { setCookie, getCookie } from '../../../app/lib/cookie-handler';
-import i18next from 'i18next';
-import { compose } from 'redux';
+import i18next from 'i18next'
+import dynamic from 'next/dynamic'
+import Link from 'next/link'
+import { signOut } from '../../services/auth/auth'
+
 
 class NavbarComponent extends React.Component { // eslint-disable-line react/prefer-stateless-function
-  
+
+	
 
 	constructor(props) {
-	    super(props);
-	    this.toggle = this.toggle.bind(this);
-	    this.changeLanguage = this.changeLanguage.bind(this);
-	    this.parseLanguage = this.parseLanguage.bind(this);
+	    super(props)
+	    this.toggle = this.toggle.bind(this)
+	    this.toggleDropdown = this.toggleDropdown.bind(this)
+	    this.toggleDropdownUser = this.toggleDropdownUser.bind(this)
+	    this.changeLanguage = this.changeLanguage.bind(this)
+	    this.parseLanguage = this.parseLanguage.bind(this)
+	    /*this.openModal = this.openModal.bind(this);
+	    this.loadModal = this.loadModal.bind(this);*/
 	    this.state = {
 	      isOpen: false,
-	      lng: i18next.language
-	      // lng: getCookie('i18next', props)
+	      lng: null,
+	      dropdownOpen: false,
+	      dropdownOpenUser: false,
+
 	    };
 
 	}
@@ -49,7 +55,6 @@ class NavbarComponent extends React.Component { // eslint-disable-line react/pre
 		this.setState({
 	      	lng: newLng
 	    })
-	    console.log('LNG',newLng)
 
 	}
 
@@ -59,97 +64,144 @@ class NavbarComponent extends React.Component { // eslint-disable-line react/pre
 	    });
 	}
 
+	toggleDropdown() {
+	    this.setState({
+	      dropdownOpen: !this.state.dropdownOpen
+	    });
+	}
+
+	toggleDropdownUser() {
+	    this.setState({
+	      dropdownOpenUser: !this.state.dropdownOpenUser
+	    });
+	}
+
 	changeLanguage(lng) {
 		this.parseLanguage(lng)
      	i18nInstance.changeLanguage(lng)
-      	setCookie('i18next',lng, 300);
+      	setCookie('i18next',lng, 300)
 	}
 
 	componentDidMount() {
-		this.parseLanguage(this.state.lng)
+		const lng = localStorage.getItem('i18nextLng').substring(0,2) || 'es'
+		setCookie('i18next',lng, 300)
+		this.parseLanguage(lng)
 	}
+
+	/*loadModal() {
+		const modal = require('../Modal').default
+        this.setState({ loadModal: modal })
+	}
+
+	openModal(type) {
+		console.log('TYPE',type)
+		const key = type == 'register' ? 'showModalRegister' : 'showModalLogin'
+		if (!this.state.loadModal) this.loadModal()        	  	
+		this.setState({ showModalRegister:true })
+	}	*/
 
 
 
 
 
 	render() {
-		const { t } = this.props
-		console.log('TTTT',this.props)
+		const { t, isAuth, logout, openModal } = this.props
+
+
+		// const Modal = this.state.loadModal
 	    return (
 	      <div>
-	        <Navbar light expand="md" fixed="top">
-	          	<NavbarBrand href="#">
-	          		erebror
-	          	</NavbarBrand>
+	        <Navbar className="navbar navbar-dark bg-dark" expand="md" fixed="top">
+	          	<Link href="/"><a className="navbar-brand">{t('home:title')}</a></Link>
 	          	<NavbarToggler onClick={this.toggle} />
 	          	<Collapse isOpen={this.state.isOpen} navbar>
-	            <Nav className="ml-auto" navbar>
-	              	{/*<NavItem>
-	              		<ActiveLink href="/espacio">
-	                		espacio
-	                	</ActiveLink>	
-	              	</NavItem>*/}
-	              	<NavItem>
-	                	<NavLink href="/ayuda">Ayuda</NavLink>
-	              	</NavItem>
-	              	<NavItem>
-	                	<NavLink href="/signin">Login</NavLink>
-	              	</NavItem>
-	              	<NavItem>
-	                	<NavLink href="/signup">Regístrate</NavLink>
-	              	</NavItem>
-	              	<UncontrolledDropdown nav inNavbar>
-		                <DropdownToggle nav caret>
-		                	<span className={"flag-icon flag-icon-" + this.state.lng}></span>
-		                </DropdownToggle>
-		                <DropdownMenu right>
-		                  	<DropdownItem>
-		                  		<div onClick={() => this.changeLanguage('es')}>
-		                    		<span className="flag-icon flag-icon-es"></span>{t('lang:es')}
-		                    	</div>
-		                  	</DropdownItem>
-		                  	<DropdownItem divider />
-		                  	<DropdownItem>
-		                  		<div onClick={() => this.changeLanguage('en')}>
-		                    		<span className="flag-icon flag-icon-gb"></span>{t('lang:en')}
-		                    	</div>	
-		                  	</DropdownItem>
-		                  	{/*<DropdownItem divider />
-		                  	<DropdownItem>
-		                    	Reset
-		                  	</DropdownItem>*/}
-		                </DropdownMenu>
-	              	</UncontrolledDropdown>
-	             
-	            </Nav>
-	          </Collapse>
+		            <Nav className="ml-auto" navbar>
+		              	
+		              	{isAuth &&
+		              	<NavItem>
+			          		<Button 
+			          			size="sm" 
+			          			color="danger"
+			          			outline
+			          			onClick={() => signOut()}
+			          		>Logout
+			          		</Button>      	
+			          	</NavItem> }
+			          	{isAuth &&
+			          	<Dropdown isOpen={this.state.dropdownOpenUser} 
+		              			  toggle={this.toggleDropdownUser}>
+			                <DropdownToggle nav>
+			                	<span className="font-weight-bold text-white">User</span>
+			                </DropdownToggle>
+			                <DropdownMenu>
+			                  	<DropdownItem>
+			                  		<Link href="/user"><a>Perfil</a></Link>
+			                  	</DropdownItem>
+			                  	<DropdownItem divider />
+			                  	<DropdownItem>
+			                  		<Link href="/user"><a>profile</a></Link>
+			                  	</DropdownItem>
+			                </DropdownMenu>
+		              	</Dropdown> }
+			          	{!isAuth && 
+			          	<NavItem>
+			          		<Button 
+			          			size="sm" 
+			          			color="warning" 
+			          			onClick={() => openModal('login')}
+			          		>Login
+			          		</Button>            	
+			          	</NavItem> }
+
+			          	{!isAuth && 
+			          	<NavItem>
+			          		<Button 
+			          			size="sm" 
+			          			color="primary" 
+			          			onClick={() => openModal('registerSocial')}
+			          		>Regístrate
+			          		</Button>
+			          	</NavItem> }		              	
+		              	<Dropdown isOpen={this.state.dropdownOpen} 
+		              			  toggle={this.toggleDropdown}
+		              			  onMouseLeave={this.toggleDropdown}>
+			                <DropdownToggle nav caret>
+			                	<span onMouseOver={this.toggleDropdown} 
+			                		  className={"flag-icon flag-icon-" + this.state.lng}></span>
+			                </DropdownToggle>
+			                <DropdownMenuMod onMouseLeave={this.toggleDropdown} right>
+			                  	<DropdownItemMod>
+			                  		<div onClick={() => this.changeLanguage('es')}>
+			                    		<span className="flag-icon flag-icon-es mr-3"></span>
+			                    		{t('lang:es')}
+			                    	</div>
+			                  	</DropdownItemMod>
+			                  	<DropdownItemMod divider />
+			                  	<DropdownItemMod>
+			                  		<div onClick={() => this.changeLanguage('en')}>
+			                    		<span className="flag-icon flag-icon-gb mr-3"></span>
+			                    		{t('lang:en')}
+			                    	</div>	
+			                  	</DropdownItemMod>
+			                </DropdownMenuMod>
+		              	</Dropdown>
+		            </Nav>
+	          	</Collapse>
 	        </Navbar>
+        
 	      </div>
 	    );
 	}
 
 }
 
-NavbarBrand.propTypes = {
-  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
-  // pass in custom element to use
+
+NavbarComponent.propTypes = {
+    isAuth: PropTypes.bool.isRequired
+   /* name: PropTypes.string,
+    email: PropTypes.string*/
+
 }
 
-Navbar.propTypes = {
-  light: PropTypes.bool,
-  dark: PropTypes.bool,
-  fixed: PropTypes.string,
-  color: PropTypes.string,
-  role: PropTypes.string,
-  expand: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
-  // pass in custom element to use
-}
-
-// export default Index;
-
-// exportd default withServerProps(Index)
 
 export default NavbarComponent
-

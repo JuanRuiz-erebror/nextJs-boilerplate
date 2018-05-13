@@ -1,45 +1,56 @@
 
-import Link from 'next/link';
-import Hello1 from '../app/components/hello1';
-import Hello2 from '../app/components/hello2';
+import React from 'react'
 import { compose } from 'redux';
+import { translate } from 'react-i18next'
+import { i18nInstance } from '../app/lib/i18n'
+import dynamic from 'next/dynamic'
+import { 
+    Button, 
+    Form, 
+    FormGroup, 
+    Label, 
+    Input, 
+    FormText,
+    Col } from 'reactstrap'
+import withLayout from '../app/hocs/withLayout'
+import ActiveLink from '../app/components/ActiveLink'
+import withServerProps from '../app/hocs/withServerProps'
+import Link from 'next/link';
+import Router from 'next/router'
+import { Container, Row } from 'reactstrap'
+import withReduxSaga from '../app/lib/store/withReduxSaga'
+import { isAuthenticated } from "../app/services/auth/auth";
 
-import { translate } from 'react-i18next';
-import { i18nInstance } from '../app/lib/i18n';
 
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
-
-import { setCookie } from '../app/lib/cookie-handler';
-import withLayout from '../app/hocs/withLayout';
-import ActiveLink from '../app/components/ActiveLink';
-import withServerProps from '../app/hocs/withServerProps';
 
 class Index extends React.Component {
-
-	static async getInitialProps({ req }) {
-	    const userAgent = req ? req.headers['user-agent'] : navigator.userAgent
-        const headers = req.headers
-	    return { userAgent, headers }
-	}
 
 
     render () {
 	    const { t, tReady } = this.props
 	    return (
-	          	<div>
-	              	<h1>{t('title')}</h1>
-                    <ActiveLink href="/counter">Counter</ActiveLink>
-	           	</div>  
+          	<div>               
+
+                <div className="main-container">
+                    <h3 className="mt-3 mr-3" >Welcome to NextJs boilerplate!!
+                    <style jsx>{`font-weight:700`}</style>
+                    </h3>
+                   
+                </div>
+                <hr className="mb-5 mt-4"/>
+        
+
+           	</div>  
 	    )
     }
 }
 
-translate.setI18n(i18nInstance);
 
 export default compose(
     
     // tranlate antes que withLayout para que podamos pasar 
     // los props a todas las capas del withLayout
-    translate(['home','common','lang']),
+    translate(),
+    withReduxSaga,
     withLayout()
 )(Index)

@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { compose } from 'redux';
 import withReduxSaga from '../../lib/store/withReduxSaga';
 import { createStructuredSelector } from 'reselect';
-import { makeSelectCounter } from '../../selectors/counter'
+import { makeSelectCounter, makeSelectUri } from '../../selectors/counter'
 
 const Counter = (props) => {
 
@@ -29,7 +29,8 @@ const Counter = (props) => {
 
 
 const mapStateToProps = createStructuredSelector({
-    count: makeSelectCounter()
+    count: makeSelectCounter(),
+    uri: makeSelectUri()
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -42,7 +43,6 @@ const mapDispatchToProps = (dispatch) => {
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 export default compose(
-    withReduxSaga,
     withConnect,
 )(Counter)
 

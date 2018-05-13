@@ -6,7 +6,8 @@ import { fromJS } from 'immutable'
 const initialState = fromJS({
     loading: false,
     error: false,    
-    count: 0
+    count: 0,
+    uri:''
 })
 
 
@@ -75,6 +76,7 @@ export default (state = initialState, action = {}) => {
             .set('loading', true)
             .set('count',state.get('count') + action.count)
             .set('error', false)
+            .set('uri',action.uri)
     case constants.COUNTER_ERROR:
         return state
             .set('loading', false)

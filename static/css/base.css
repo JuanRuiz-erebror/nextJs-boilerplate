@@ -1,5 +1,149 @@
-  body { 
-    background: #6b4242;
-    padding-top:70px;
-    color: #fff;
+body {
+    background: #fff;
+    padding-top:50px;
   }
+
+.main-container {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    max-width: none !important;
+}
+
+@media (min-width: 1128px) {
+  .main-container {
+      margin: 0 auto !important;
+      position: relative !important;
+      padding-left: 80px !important;
+      padding-right: 80px !important;
+  }
+}  
+
+.modal {
+   top: 10%;
+}
+
+.col-xs-15,
+.col-sm-15,
+.col-md-15,
+.col-lg-15 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 10px;
+    padding-left: 10px;
+    /*flex: 0 0 20%;*/
+}
+
+@media (min-width: 768px) {
+.col-sm-15 {
+        max-width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 992px) {
+    .col-md-15 {
+        max-width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 1200px) {
+    .col-lg-15 {
+        max-width: 20%;
+        float: left;
+        flex: 0 0 20%;
+    }
+}
+
+@media (min-width: 1710px) {
+    .col-xl-15 {
+        max-width: 20%;
+        float: left;
+    }
+    .col-xl-2 {
+        flex: 0 0 16.666667%;
+        max-width: 16.666667%;
+        float: left;
+    }
+}
+
+
+.control {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.control input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+.control__indicator {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  border: 1px solid #ced4da;
+}
+.control--radio .control__indicator {
+  border-radius: 50%;
+}
+/*.control:hover input ~ .control__indicator,
+.control input:focus ~ .control__indicator {
+  border: 1px solid #2aa1c0;
+  box-shadow: 0 0 4px 0 #2aa1c0;
+}
+*/
+
+.control input:checked ~ .control__indicator {
+  background: #2aa1c0;
+  
+}
+.control:hover input:not([disabled]):checked ~ .control__indicator,
+.control input:checked:focus ~ .control__indicator {
+  background: #0e647d;
+  border:none;
+  box-shadow:none;
+
+}
+.control input:disabled ~ .control__indicator {
+  background: #e6e6e6;
+  opacity: 0.6;
+  pointer-events: none;
+}
+.control__indicator:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+.control input:checked ~ .control__indicator:after {
+  display: block;
+}
+.control--checkbox .control__indicator:after {
+  left: 8px;
+  top: 4px;
+  width: 4px;
+  height: 9px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+}
+.control--checkbox input:disabled ~ .control__indicator:after {
+  border-color: #7b7b7b;
+}
+.control--radio .control__indicator:after {
+  left: 7px;
+  top: 7px;
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+.control--radio input:disabled ~ .control__indicator:after {
+  background: #7b7b7b;
+}
